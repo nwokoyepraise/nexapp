@@ -19,10 +19,13 @@ app.get('/', async function (req, res) {
 
 app.get('/api/products/list', async function (req, res) {
     try {
-        let body = req.body,
-            user_id = body.user_id,
-            tab = body.tab;
+        let query = req.query,
+            user_id = query.user_id,
+            page = query.page,
+            tab = query.tab;
 
+        let res0 = await pool.query('SELECT * FROM product_list LIMIT 2');
+        res.status(200).send({ status: true, data: res0.rows })
 
 
     } catch (error) {
@@ -32,7 +35,12 @@ app.get('/api/products/list', async function (req, res) {
 
 app.get('/api/products/product_details', async function (req, res) {
     try {
+        let query = req.query,
+            product_id = query.product_id,
+            user_id = query.user_id;
 
+        let res0 = await pool.query('SELECT * FROM product_list WHERE product_id = $1', [product_id]);
+        res.status(200).send({ status: true, data: res0.rows[0] })
     } catch (error) {
         console.error(error);
     }
@@ -45,7 +53,7 @@ app.get('/api/user/cart', async function (req, res) {
             user_id = query.user_id;
 
         let res0 = await pool.query('SELECT * FROM shopping_cart WHERE user_id = $1', [user_id]);
-            res.status(200).send({status: true, data: res0.rows})
+        res.status(200).send({ status: true, data: res0.rows })
     } catch (error) {
         console.error(error);
     }
