@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
-const port_number = Number.parseInt(process.env.PORT_NUMBER);
+const port_number = process.env.PORT || Number.parseInt(process.env.PORT_NUMBER);
 
 //use and set express json limit
 app.use(express.json({ limit: '20kb' }));
