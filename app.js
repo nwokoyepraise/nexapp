@@ -55,7 +55,7 @@ app.get('/api/products/product_details', async function (req, res) {
             product_id = query.product_id,
             user_id = query.user_id;
 
-        let res0 = await pool.query('SELECT product_id, product_list.seller_id, product_name, unit_price, currency, photo, seller_name, verified, product_desc, delivery_method, avail_colors, avail_sizes, avail_quantity,' +
+        let res0 = await pool.query('SELECT product_id, product_list.seller_id, product_name, unit_price, currency, photo, seller_name, verified, product_desc, delivery_methods, avail_colors, avail_sizes, avail_quantity,' +
             'pckg_fee, delivery_fee FROM product_list INNER JOIN seller_profile USING (seller_id) WHERE product_id = $1', [product_id]);
 
         res.status(200).send({ status: true, data: res0.rows[0] });
@@ -70,7 +70,7 @@ app.get('/api/user/cart', async function (req, res) {
         let query = req.query,
             user_id = query.user_id;
 
-        let res0 = await pool.query('SELECT item_id, product_id, user_id, quantity, shopping_cart.delivery_method, product_color, product_size, unit_price, delivery_addr, ' + 
+        let res0 = await pool.query('SELECT item_id, product_id, user_id, quantity, delivery_method, product_color, product_size, unit_price, delivery_addr, ' + 
         'product_name, product_desc, photo, product_list.delivery_fee, product_list.pckg_fee, product_list.seller_id, seller_name, verified FROM shopping_cart INNER JOIN product_list USING (product_id) INNER JOIN seller_profile USING (seller_id) WHERE user_id = $1', [user_id]);
 
         res0.rows.forEach((element, i) => {res0.rows[i].total = (element.unit_price * element.quantity) + element.delivery_fee + element.pckg_fee;})
