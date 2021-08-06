@@ -33,15 +33,15 @@ app.get('/api/products/list', async function (req, res) {
         let res0;
         if (lt && tab && forward === true) {
             res0 = await pool.query('SELECT product_id, product_list.seller_id, EXTRACT (EPOCH FROM product_list.timestamp)::INTEGER AS timestamp, product_name, unit_price, currency, photo,'
-                + 'seller_name, verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id  WHERE product_list.timestamp > $1 AND tab = $2 LIMIT 10', [lt, tab]);
+                + 'seller_name, verified FROM product_list INNER JOIN seller_profile USING (seller_id) WHERE product_list.timestamp > $1 AND tab = $2 LIMIT 10', [lt, tab]);
         }
         else if (lt && tab && forward === false) {
             res0 = await pool.query('SELECT product_id, product_list.seller_id, EXTRACT (EPOCH FROM product_list.timestamp)::INTEGER AS timestamp, product_name, unit_price, currency, photo,'
-                + 'seller_name, verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id WHERE product_list.timestamp < $1 AND tab = $2 LIMIT 10', [lt, tab]);
+                + 'seller_name, verified FROM product_list INNER JOIN seller_profile USING (seller_id) WHERE product_list.timestamp < $1 AND tab = $2 LIMIT 10', [lt, tab]);
         }
         else {
             res0 = await pool.query('SELECT product_id, product_list.seller_id, EXTRACT (EPOCH FROM product_list.timestamp)::INTEGER AS timestamp, product_name, unit_price, currency, photo,'
-                + 'seller_name, verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id WHERE tab = $1 LIMIT 10 ', [tab]);
+                + 'seller_name, verified FROM product_list INNER JOIN seller_profile USING (seller_id) WHERE tab = $1 LIMIT 10 ', [tab]);
         }
         res.status(200).send({ status: true, data: res0.rows });
     } catch (error) {
@@ -55,8 +55,8 @@ app.get('/api/products/product_details', async function (req, res) {
             product_id = query.product_id,
             user_id = query.user_id;
 
-        let res0 = await pool.query('SELECT product_id, product_list.seller_id, product_name, unit_price, currency, photo, seller_name, verified, product_desc, avail_colors, avail_sizes, avail_quantity,' + 
-        'pckg_fee, delivery_fee FROM product_list INNER JOIN seller_profile USING (seller_id) WHERE product_id = $1', [product_id]);
+        let res0 = await pool.query('SELECT product_id, product_list.seller_id, product_name, unit_price, currency, photo, seller_name, verified, product_desc, avail_colors, avail_sizes, avail_quantity,' +
+            'pckg_fee, delivery_fee FROM product_list INNER JOIN seller_profile USING (seller_id) WHERE product_id = $1', [product_id]);
 
         res0.rows[0].total = res0.rows[0].unit_price + res0.rows[0].delivery_fee + res0.rows[0].pckg_fee;
         res.status(200).send({ status: true, data: res0.rows[0] });
