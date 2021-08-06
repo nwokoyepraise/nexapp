@@ -71,7 +71,8 @@ app.get('/api/user/cart', async function (req, res) {
         let query = req.query,
             user_id = query.user_id;
 
-        let res0 = await pool.query('SELECT * FROM shopping_cart WHERE user_id = $1', [user_id]);
+        let res0 = await pool.query('SELECT item_id, product_id, user_id, quantity, delivery_method, product_color, product_size, delivery_addr, product_name, product_desc, photo, product_list.seller_id, seller_name, verified FROM shopping_cart ' + 
+        'INNER JOIN product_list USING (product_id) INNER JOIN seller_profile USING (seller_id) WHERE user_id = $1', [user_id]);
         res.status(200).send({ status: true, data: res0.rows })
     } catch (error) {
         console.error(error);
