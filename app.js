@@ -26,7 +26,7 @@ app.get('/api/products/list', async function (req, res) {
             forward = query.forward,
             tab = query.tab;
 
-        let res0;
+        let res0; console.log(lt, forward, tab)
         if (lt && tab && forward == true) {console.log(1)
             res0 = await pool.query('SELECT product_list.product_id, product_list.seller_id, product_list.product_name, product_list.unit_price, product_list.currency, product_list.photo,'
             + 'seller_profile.seller_name, seller_profile.verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id WHERE product_list.timestamp > $1 AND product_list.tab = $2 LIMIT 10', [lt, tab]);
