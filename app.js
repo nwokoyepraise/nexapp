@@ -24,7 +24,7 @@ app.get('/api/products/list', async function (req, res) {
             page = query.page,
             tab = query.tab;
 
-        let res0 = await pool.query('SELECT * FROM product_list LIMIT 2');
+        let res0 = await pool.query('SELECT * FROM product_list LIMIT 10');
         res.status(200).send({ status: true, data: res0.rows })
 
 
