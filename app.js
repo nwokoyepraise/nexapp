@@ -1,3 +1,4 @@
+'use strict'
 require('dotenv').config();
 const { timeStamp } = require('console');
 const express = require('express');
@@ -22,21 +23,24 @@ app.get('/api/products/list', async function (req, res) {
     try {
         let query = req.query,
             user_id = query.user_id,
-            lt = new Date(query.lt),
+            lt = query.lt,
             forward = query.forward,
             tab = query.tab;
 
-        let res0; console.log(lt, forward, tab)
-        if (lt && tab && forward == true) {console.log(1)
-            res0 = await pool.query('SELECT product_list.product_id, product_list.seller_id, product_list.product_name, product_list.unit_price, product_list.currency, product_list.photo,'
-            + 'seller_profile.seller_name, seller_profile.verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id WHERE product_list.timestamp > $1 AND product_list.tab = $2 LIMIT 10', [lt, tab]);
+        lt = (lt) ? new Date(query.lt * 1000) : null;
+        forward = (forward) ? forward === 'true' : null;
+
+        let res0;
+        if (lt && tab && forward === true) {
+            res0 = await pool.query('SELECT product_list.product_id, product_list.seller_id, EXTRACT (EPOCH FROM product_list.timestamp)::INTEGER AS timestamp, product_list.product_name, product_list.unit_price, product_list.currency, product_list.photo,'
+                + 'seller_profile.seller_name, seller_profile.verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id  WHERE product_list.timestamp > $1 AND product_list.tab = $2 LIMIT 10', [lt, tab]);
         }
-        else if (lt && tab && forward == false) {console.log(2)
-            res0 = await pool.query('SELECT product_list.product_id, product_list.seller_id, product_list.product_name, product_list.unit_price, product_list.currency, product_list.photo,'
-            + 'seller_profile.seller_name, seller_profile.verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id WHERE product_list.timestamp < $1 AND product_list.tab = $2 LIMIT 10', [lt, tab]);
+        else if (lt && tab && forward === false) {
+            res0 = await pool.query('SELECT product_list.product_id, product_list.seller_id, EXTRACT (EPOCH FROM product_list.timestamp)::INTEGER AS timestamp, product_list.product_name, product_list.unit_price, product_list.currency, product_list.photo,'
+                + 'seller_profile.seller_name, seller_profile.verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id WHERE product_list.timestamp < $1 AND product_list.tab = $2 LIMIT 10', [lt, tab]);
         }
-        else {console.log(3)
-            res0 = await pool.query('SELECT product_list.product_id, product_list.seller_id, product_list.product_name, product_list.unit_price, product_list.currency, product_list.photo,'
+        else {
+            res0 = await pool.query('SELECT product_list.product_id, product_list.seller_id, EXTRACT (EPOCH FROM product_list.timestamp)::INTEGER AS timestamp, product_list.product_name, product_list.unit_price, product_list.currency, product_list.photo,'
                 + 'seller_profile.seller_name, seller_profile.verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id WHERE product_list.tab = $1 LIMIT 10 ', [tab]);
         }
         res.status(200).send({ status: true, data: res0.rows });
