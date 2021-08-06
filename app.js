@@ -1,4 +1,5 @@
 require('dotenv').config();
+const { timeStamp } = require('console');
 const express = require('express');
 const app = express();
 const server = require('http').createServer(app);
@@ -21,13 +22,21 @@ app.get('/api/products/list', async function (req, res) {
     try {
         let query = req.query,
             user_id = query.user_id,
-            page = query.page,
+            lt = query.lt,
+            forward = query.forward,
             tab = query.tab;
 
-        let res0 = await pool.query('SELECT * FROM product_list LIMIT 10');
-        res.status(200).send({ status: true, data: res0.rows })
-
-
+        let res0;
+        if (lt && tab && forward == true) {
+            res0 = await pool.query('SELECT * FROM product_list WHERE timestamp > $1 AND tab = $2 LIMIT 10', [lt, tab]);
+        }
+        else if (lt &&  tab && forward == false) {
+            res0 = await pool.query('SELECT * FROM product_list WHERE timestamp < $1 AND tab = $2 LIMIT 10', [lt, tab]);
+        }
+        else {
+            res0 = await pool.query('SELECT * FROM product_list  WHERE tab = $1 LIMIT 10', [tab]);
+        }
+        res.status(200).send({ status: true, data: res0.rows });
     } catch (error) {
         console.error(error);
     }
