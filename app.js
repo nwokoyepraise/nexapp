@@ -28,13 +28,16 @@ app.get('/api/products/list', async function (req, res) {
 
         let res0;
         if (lt && tab && forward == true) {
-            res0 = await pool.query('SELECT * FROM product_list WHERE timestamp > $1 AND tab = $2 LIMIT 10', [lt, tab]);
+            res0 = await pool.query('SELECT product_list.product_id, product_list.seller_id, product_list.product_name, product_list.unit_price, product_list.currency, product_list.photo,'
+            + 'seller_profile.seller_name, seller_profile.verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id WHERE timestamp > $1 AND tab = $2 LIMIT 10', [lt, tab]);
         }
-        else if (lt &&  tab && forward == false) {
-            res0 = await pool.query('SELECT * FROM product_list WHERE timestamp < $1 AND tab = $2 LIMIT 10', [lt, tab]);
+        else if (lt && tab && forward == false) {
+            res0 = await pool.query('SELECT product_list.product_id, product_list.seller_id, product_list.product_name, product_list.unit_price, product_list.currency, product_list.photo,'
+            + 'seller_profile.seller_name, seller_profile.verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id WHERE timestamp < $1 AND tab = $2 LIMIT 10', [lt, tab]);
         }
         else {
-            res0 = await pool.query('SELECT * FROM product_list  WHERE tab = $1 LIMIT 10', [tab]);
+            res0 = await pool.query('SELECT product_list.product_id, product_list.seller_id, product_list.product_name, product_list.unit_price, product_list.currency, product_list.photo,'
+                + 'seller_profile.seller_name, seller_profile.verified FROM product_list INNER JOIN seller_profile ON product_list.seller_id = seller_profile.seller_id WHERE product_list.tab = $1 LIMIT 10 ', [tab]);
         }
         res.status(200).send({ status: true, data: res0.rows });
     } catch (error) {
@@ -49,7 +52,7 @@ app.get('/api/products/product_details', async function (req, res) {
             user_id = query.user_id;
 
         let res0 = await pool.query('SELECT * FROM product_list WHERE product_id = $1', [product_id]);
-        res.status(200).send({ status: true, data: res0.rows[0] })
+        res.status(200).send({ status: true, data: res0.rows[0] });
     } catch (error) {
         console.error(error);
     }
