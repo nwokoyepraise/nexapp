@@ -22,7 +22,7 @@ app.get('/api/products/list', async function (req, res) {
     try {
         let query = req.query,
             user_id = query.user_id,
-            lt = query.lt,
+            lt = new Date(query.lt),
             forward = query.forward,
             tab = query.tab;
 
