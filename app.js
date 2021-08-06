@@ -55,7 +55,10 @@ app.get('/api/products/product_details', async function (req, res) {
             product_id = query.product_id,
             user_id = query.user_id;
 
-        let res0 = await pool.query('SELECT * FROM product_list WHERE product_id = $1', [product_id]);
+        let res0 = await pool.query('SELECT product_id, product_list.seller_id, product_name, unit_price, currency, photo, seller_name, verified, product_desc, avail_colors, avail_sizes, avail_quantity,' + 
+        'pckg_fee, delivery_fee FROM product_list INNER JOIN seller_profile USING (seller_id) WHERE product_id = $1', [product_id]);
+
+        res0.rows[0].total = res0.rows[0].unit_price + res0.rows[0].delivery_fee + res0.rows[0].pckg_fee;
         res.status(200).send({ status: true, data: res0.rows[0] });
     } catch (error) {
         console.error(error);
