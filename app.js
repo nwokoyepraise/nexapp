@@ -17,6 +17,7 @@ home(app);
 product_detail(app);
 product_list(app);
 cart_mgmt.get_cart(app);
+cart_mgmt.add_item(app);
 
 server.listen(port_number, () => {
     console.log(`server listening on port ${port_number}`);
