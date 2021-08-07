@@ -19,7 +19,7 @@ module.exports.add_item = function (app) {
                 delivery_addr = body.delivery_addr;
 
             //return if user does not exist
-            if (!user_exists(user_id)) { return res.status(406).send({ status: false, message: 'User does not exist!' }); }
+            if (!await user_exists(user_id)) { return res.status(406).send({ status: false, message: 'User does not exist!' }); }
 
             //build object
             let obj = { product_id: product_id, quantity: quantity, delivery_method: delivery_method, product_color: product_color, product_size, product_size, delivery_addr: delivery_addr };
@@ -50,6 +50,42 @@ module.exports.add_item = function (app) {
             delete res1.rows[0].timestamp;
             //if succssful revert inserted item info to user
             return res.status(200).send({ status: true, data: res1.rows[0] });
+
+        } catch (error) {
+            console.error(error)
+            res.status(500).send({ status: false, message: 'Internal Server Error' });
+            error_logger('/api/products/list', error);
+        }
+    });
+}
+
+module.exports.remove_item = function (app) {
+    app.post('/api/user/cart/remove_item', async function (req, res) {
+        try {
+            let body = req.body,
+                user_id = body.user_id,
+                item_id = body.item_id;
+
+                
+            //return if user does not exist
+            if (!await user_exists(user_id)) { return res.status(406).send({ status: false, message: 'User does not exist!' }); }
+
+            //select user_id of item owner in DB
+            let res0 = await pool.query('SELECT user_id FROM shopping_cart WHERE item_id = $1', [item_id]);
+
+            //revert if item is not found
+            if (!res0.rowCount > 0) { return res.status(400).send({ status: false, message: 'Item does not exist!' }); }
+
+            //check and return if user is not the owner of item
+            if (res0.rows[0].user_id != user_id) { return res.status(406).send({ status: false, message: 'User is not the owner of resource!' }); }
+
+            //remove item from DB
+            let res1 = await pool.query('DELETE FROM shopping_cart WHERE item_id = $1', [item_id]);
+
+            if (!res1.rowCount > 0) { return res.status(500).send({ status: false, message: 'Unable to remove item at this time, please try again later!' }); }
+
+            //send data response to user
+            res.status(200).send({ status: true, data: { message: 'Item successfully removed!' } });
 
         } catch (error) {
             console.error(error)
