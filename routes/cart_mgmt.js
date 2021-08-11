@@ -28,7 +28,7 @@ module.exports.add_item = function (app) {
             let res0 = await pool.query('SELECT avail_quantity, avail_sizes, avail_colors, delivery_methods FROM product_list WHERE product_id = $1', [product_id]);
             
             //return if product does not exist
-            if (!res0.rowCount > 0) {return res.status(404).send({status: false, message:'Porduct not found!'})}
+            if (!res0.rowCount > 0) {return res.status(404).send({status: false, message:'Product not found!'})}
             res0 = res0.rows[0];
 
             //check if any of the request fields is null and return appropriately
