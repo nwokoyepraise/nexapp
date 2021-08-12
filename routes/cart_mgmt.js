@@ -77,7 +77,7 @@ module.exports.remove_item = function (app) {
             let res0 = await pool.query('SELECT user_id FROM shopping_cart WHERE item_id = $1', [item_id]);
 
             //revert if item is not found
-            if (!res0.rowCount > 0) { return res.status(400).send({ status: false, message: 'Item does not exist!' }); }
+            if (!res0.rowCount > 0) { return res.status(404).send({ status: false, message: 'Item does not exist!' }); }
 
             //check and return if user is not the owner of item
             if (res0.rows[0].user_id != user_id) { return res.status(406).send({ status: false, message: 'User is not the owner of resource!' }); }
