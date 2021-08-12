@@ -26,9 +26,9 @@ module.exports.add_item = function (app) {
 
             //retrieve product info from DB
             let res0 = await pool.query('SELECT avail_quantity, avail_sizes, avail_colors, delivery_methods FROM product_list WHERE product_id = $1', [product_id]);
-            
+
             //return if product does not exist
-            if (!res0.rowCount > 0) {return res.status(404).send({status: false, message:'Product not found!'})}
+            if (!res0.rowCount > 0) { return res.status(404).send({ status: false, message: 'Product not found!' }) }
             res0 = res0.rows[0];
 
             //check if any of the request fields is null and return appropriately
@@ -69,7 +69,7 @@ module.exports.remove_item = function (app) {
                 user_id = body.user_id,
                 item_id = body.item_id;
 
-                
+
             //return if user does not exist
             if (!await user_exists(user_id)) { return res.status(406).send({ status: false, message: 'User does not exist!' }); }
 
@@ -103,6 +103,9 @@ module.exports.get_cart = function (app) {
         try {
             let query = req.query,
                 user_id = query.user_id;
+
+            //return if user does not exist
+            if (!await user_exists(user_id)) { return res.status(406).send({ status: false, message: 'User does not exist!' }); }
 
             //inner join query for shopping cart product list and seller data on shopping cart, product list and seller profile tables
             let res0 = await pool.query('SELECT item_id, product_id, user_id, quantity, delivery_method, product_color, product_size, unit_price, delivery_addr, ' +
