@@ -8,7 +8,7 @@ const home = require('./routes/home');
 const product_list = require('./routes/product_list');
 const cart_mgmt = require('./routes/cart_mgmt');
 const product_detail = require('./routes/product_detail');
-//const verify_charge = require('./routes/verify_charge');
+const verify_charge = require('./routes/verify_charge');
 const checkout = require('./routes/checkout');
 
 //use and set express json limit
@@ -21,7 +21,7 @@ product_list(app);
 cart_mgmt.get_cart(app);
 cart_mgmt.add_item(app);
 cart_mgmt.remove_item(app);
-//verify_charge(app);
+verify_charge(app);
 checkout.checkout_item(app);
 
 server.listen(port_number, () => {
