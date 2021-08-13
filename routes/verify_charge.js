@@ -12,7 +12,7 @@ module.exports = function (app) {
 
             if (response.status === 'success') {
                 return res.status(200).send({ status: true, data: { message: 'Transaction was successful!' } });
-            } else { return res.status(200).send({ status: false, data: { message: 'Transaction was not successful!' } }); }
+            } else { return res.status(200).send({ status: false, data: { message: 'Transaction was not successful or does not exist!' } }); }
         } catch (error) {
             console.error(error);
             res.status(500).send({ status: false, message: 'Internal Server Error' });
