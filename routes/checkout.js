@@ -34,6 +34,9 @@ module.exports.checkout_item = function (app) {
             if (!res0.rowCount > 0) { return res.status(404).send({ status: false, message: 'Item not found!' }); }
             res0 = res0.rows[0];
 
+            //check and return if user is not the owner of item
+            if (res0.user_id != user_id) { return res.status(406).send({ status: false, message: 'User is not the owner of resource!' }); }
+
             //check and return if product remaining stock quantity is less than requested quantity
             if (res0.avail_quantity < res0.quantity) { return res.status(404).send({ status: false, message: 'Quantity of item in cart is greater than available stock!' }); }
 
@@ -103,7 +106,6 @@ module.exports.checkout_item = function (app) {
         }
     });
 }
-
 
 
 
