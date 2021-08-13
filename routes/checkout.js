@@ -8,7 +8,7 @@ const pool = require('../config/postgres_config');
 const error_logger = require('../util/error_logger');
 
 module.exports.checkout_item = function (app) {
-    app.post('/api/checkout/item', async function (req, res) {
+    app.post('/api/cart/checkout/item', async function (req, res) {
         try {
             let body = req.body,
                 user_id = body.user_id,

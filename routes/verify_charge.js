@@ -1,7 +1,7 @@
 const flutterwave = require('../config/flutterwave_config');
 
 module.exports = function (app) {
-    app.post('/api/checkout/verify_charge', async function (req, res) {
+    app.post('/api/cart/checkout/verify_charge', async function (req, res) {
         try {
             let body = req.body,
                 tx_id = body.tx_id,
