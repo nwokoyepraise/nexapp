@@ -31,7 +31,7 @@ module.exports.checkout_item = function (app) {
 
 
             //return if item is not found
-            if (!res0.rowCount > 0) { return res.status(404).send({ status: false, message: 'Item not found!' }); }
+            if (!res0.rowCount > 0) { return res.status(404).send({ status: false, message: 'Item does not exist!' }); }
             res0 = res0.rows[0];
 
             //check and return if user is not the owner of item
