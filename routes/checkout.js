@@ -38,16 +38,16 @@ module.exports.checkout_item = function (app) {
             if (res0.user_id != user_id) { return res.status(406).send({ status: false, message: 'User is not the owner of resource!' }); }
 
             //check and return if product remaining stock quantity is less than requested quantity
-            if (res0.avail_quantity < res0.quantity) { return res.status(404).send({ status: false, message: 'Quantity of item in cart is greater than available stock!' }); }
+            if (res0.avail_quantity < res0.quantity) { return res.status(406).send({ status: false, message: 'Quantity of item in cart is greater than available stock!' }); }
 
             //check and return if requested product sizes is no longer available
-            if (!res0.avail_sizes.includes(res0.product_size)) { return res.status(404).send({ status: false, message: 'Requested product size is no longer availabe for item!' }); }
+            if (!res0.avail_sizes.includes(res0.product_size)) { return res.status(406).send({ status: false, message: 'Requested product size is no longer availabe for item!' }); }
 
             //check and return if requested product color is no longer available
-            if (!res0.avail_colors.includes(res0.product_color)) { return res.status(404).send({ status: false, message: 'Requested product color is no longer availabe for item!' }); }
+            if (!res0.avail_colors.includes(res0.product_color)) { return res.status(406).send({ status: false, message: 'Requested product color is no longer availabe for item!' }); }
 
             //check and return if requested delivery method is no longer available for product
-            if (!res0.delivery_methods.includes(res0.delivery_method)) { return res.status(404).send({ status: false, message: 'Requested delivery method is no longer availabe for item!' }); }
+            if (!res0.delivery_methods.includes(res0.delivery_method)) { return res.status(406).send({ status: false, message: 'Requested delivery method is no longer availabe for item!' }); }
 
             //calculate item total price
             let total_price = (res0.unit_price * res0.quantity) + res0.delivery_fee + res0.pckg_fee;
