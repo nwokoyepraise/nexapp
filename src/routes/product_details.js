@@ -3,11 +3,13 @@ const product_handler = require('../services/product_handler');
 
 module.exports = router.get('', async function (req, res) {
     try {
-        let query = req.query;
+        let query = req.query,
+            product_id = query.product_id,
+            user_id = query.user_id;
 
-        //retrieve product_list using product handler service
-        let data = await product_handler.product_list(query);
-
+        //retrieve product_details using product handler service
+        let data = await product_handler.product_details(product_id);
+ 
         //revert response to user
         switch (data.status) {
             case false:

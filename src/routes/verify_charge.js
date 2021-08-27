@@ -1,22 +1,19 @@
 const flutterwave = require('../config/flutterwave_config');
+const router = require('express').Router();
+const verify_charge_handler = require('../services/verfy_charge_handler');
 
-module.exports = function (app) {
-    app.post('/api/cart/checkout/verify_charge', async function (req, res) {
-        try {
-            let body = req.body,
-                tx_id = body.tx_id,
-                user_id = body.user_id;
+module.exports = router.post('', async function (req, res) {
+    try {
+        let body = req.body,
+            tx_id = body.tx_id,
+            user_id = body.user_id;
 
-            const payload = { "id": tx_id }
-            const response = await flutterwave.Transaction.verify(payload)
+        let data = await verify_charge_handler(tx_id)
 
-            if (response.status === 'success') {
-                return res.status(200).send({ status: true, data: { message: 'Transaction was successful!' } });
-            } else { return res.status(200).send({ status: false, data: { message: 'Transaction was not successful or does not exist!' } }); }
-        } catch (error) {
-            console.error(error);
-            res.status(500).send({ status: false, message: 'Internal Server Error' });
-            error_logger('/api/products/product_details', error);
-        }
-    });
-}
+        //revert response to user
+        res.status(200).send({ status: data.status, data: data.data });
+
+    } catch (error) {
+        console.error(error);
+    }
+});
