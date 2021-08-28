@@ -17,11 +17,12 @@ module.exports = router.post('', async function (req, res) {
 
         let obj = { card_number: card_number, cvv: cvv, expiry_month: expiry_month, expiry_year: expiry_year, fullname: fullname, email: email, phone_number: phone_number }
 
+        //perform transaction with checkout_handler service
         let data = await checkout_handler(user_id, item_id, obj);
 
         //revert response to user
         base_response.send_response(res, data);
-        
+
     } catch (error) {
         console.error(error);
     }

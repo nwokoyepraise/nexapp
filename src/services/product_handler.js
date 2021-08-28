@@ -28,6 +28,7 @@ module.exports.product_list = async function (query) {
         lt = (lt) ? new Date(query.lt * 1000) : null;
         forward = (forward) ? forward === 'true' : null;
 
+        //get data from product list model (DB)
         let res0 = await product_model.product_list(lt, tab, forward);
 
         return { status: true, data: res0.rows }
