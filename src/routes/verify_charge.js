@@ -1,4 +1,3 @@
-const flutterwave = require('../config/flutterwave_config');
 const router = require('express').Router();
 const verify_charge_handler = require('../services/verfy_charge_handler');
 

@@ -1,6 +1,7 @@
 const crypt_gen = require('../utils/crypt_gen');
 const router = require('express').Router();
 const shopping_cart_handler = require('../services/shopping_cart_handler');
+const base_response = require('./base_response');
 
 
 router.post('/add_item', async function (req, res) {
@@ -22,15 +23,8 @@ router.post('/add_item', async function (req, res) {
         let data = await shopping_cart_handler.add_item(obj, user_id, item_id);
 
         //revert response to user
-        switch (data.status) {
-            case false:
-                res.status(data.status_code).send({ status: false, message: data.message });
-                break;
-
-            case true:
-                res.status(200).send({ status: true, data: data.data });
-                break;
-        }
+        base_response.send_response(res, data);
+        
     } catch (error) {
         console.error(error)
     }

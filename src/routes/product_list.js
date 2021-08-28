@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const product_handler = require('../services/product_handler');
+const base_response = require('./base_response');
 
 module.exports = router.get('', async function (req, res) {
     try {
@@ -9,15 +10,8 @@ module.exports = router.get('', async function (req, res) {
         let data = await product_handler.product_list(query);
 
         //revert response to user
-        switch (data.status) {
-            case false:
-                res.status(data.status_code).send({ status: false, message: data.message });
-                break;
+        base_response.send_response(res, data);
 
-            case true:
-                res.status(200).send({ status: true, data: data.data });
-                break;
-        }
     } catch (error) {
         console.error(error);
     }

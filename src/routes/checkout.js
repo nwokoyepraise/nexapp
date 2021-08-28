@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const checkout_handler = require('../services/checkout_handler');
+const base_response = require('./base_response');
 
 module.exports = router.post('', async function (req, res) {
     try {
@@ -19,15 +20,8 @@ module.exports = router.post('', async function (req, res) {
         let data = await checkout_handler(user_id, item_id, obj);
 
         //revert response to user
-        switch (data.status) {
-            case false:
-                res.status(data.status_code).send({ status: false, message: data.message });
-                break;
-
-            case true:
-                res.status(200).send({ status: true, data: data.data });
-                break;
-        }
+        base_response.send_response(res, data);
+        
     } catch (error) {
         console.error(error);
     }
