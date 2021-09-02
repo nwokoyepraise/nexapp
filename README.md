@@ -1,6 +1,5 @@
 # Nexapp
-Demo Back-end Application for Nexbuy District Limited
-
+Demo Backend Applcation for Nexbuy District Limited
 <!-- PROJECT SHIELDS -->
 <!--
 *** I'm using markdown "reference style" links for readability.
