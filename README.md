@@ -1,5 +1,5 @@
 # Nexapp
-Demo Backend Applcation for Nexbuy District Limited
+Demo Backend Application for Nexbuy District Limited!
 
 <!-- PROJECT SHIELDS -->
 <!--
