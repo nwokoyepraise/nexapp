@@ -100,7 +100,7 @@ To build the project locally, simply clone the github repository. Navigate to ro
 
 After packages have been installed. Proceed to run:
 
-`node app.js`
+`node src/app.js`
 
 ## API Endpoints
 
@@ -111,7 +111,7 @@ This endpoint is used to get a list of products under a specific tab e.g. "For Y
 ```http
 
 GET /api/products/list?tab=FOR%20YOU HTTP/1.1
-Host: nexapp-backend.herokuapp.com
+Host: localhost:3000
 
 Response:
 {
