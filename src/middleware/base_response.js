@@ -1,4 +1,5 @@
-module.exports.send_response = function (res, data) {
+module.exports = function (req, res) {
+    let data = res.locals.data;
     //revert response to user
     switch (data.status) {
         case false:

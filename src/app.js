@@ -10,16 +10,17 @@ const cart_mgmt = require('./routes/cart_mgmt');
 const product_details = require('./routes/product_details');
 const verify_charge = require('./routes/verify_charge');
 const checkout = require('./routes/checkout');
+const base_response = require('./middleware/base_response');
 
 //use and set express json limit
 app.use(express.json({ limit: '20kb' }));
 
 //load routes
 app.use('/', home);
-app.use('/api/products/product_details', product_details);
-app.use('/api/products/list', product_list)
-app.use('/api/user/cart', cart_mgmt);
-app.use('/api/cart/checkout/item', checkout);
+app.use('/api/products/product_details', product_details, base_response);
+app.use('/api/products/list', product_list, base_response)
+app.use('/api/user/cart', cart_mgmt, base_response);
+app.use('/api/cart/checkout/item', checkout, base_response);
 app.use('/api/cart/checkout/verify_charge', verify_charge);
 
 server.listen(port_number, () => {
