@@ -215,7 +215,7 @@ Endpoint used to add product to cart
 
 ```http
 
-POST /api/user/cart/remove_item HTTP/1.1
+DELETE /api/user/cart/remove_item HTTP/1.1
 Host: localhost:3000
 Content-Type: application/json
 
