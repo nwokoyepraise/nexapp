@@ -29,7 +29,7 @@ router.post('/add_item', async function (req, res, next) {
 });
 
 
-router.post('/remove_item', async function (req, res, next) {
+router.delete('/remove_item', async function (req, res, next) {
     try {
         let body = req.body,
             user_id = body.user_id,
